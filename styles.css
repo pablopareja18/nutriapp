@@ -1,0 +1,187 @@
+/* nutriapp — panel de control, móvil primero. Sin fuentes externas (offline). */
+:root {
+  --bg: #f6f7f5;
+  --surface: #ffffff;
+  --ink: #1b2a2f;
+  --muted: #5e6e72;
+  --line: #d9dfdf;
+  --medido: #0f766e;       /* número medido con tus datos */
+  --medido-bg: #dff3ef;
+  --estimado: #b45309;     /* número estimado por fórmula */
+  --estimado-bg: #fdecd3;
+  --peligro: #b42318;
+  --peligro-bg: #fde8e6;
+  --tab-h: 58px;
+  --radio: 6px;
+  --fuente: -apple-system, "SF Pro Text", "Segoe UI Variable", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  color-scheme: light;
+}
+:root[data-tema="oscuro"] {
+  --bg: #10191c; --surface: #182428; --ink: #e6edee; --muted: #93a5a9; --line: #2a3a3f;
+  --medido: #4fd1c1; --medido-bg: #123a37; --estimado: #f4b45f; --estimado-bg: #3f2a0f;
+  --peligro: #ff8f83; --peligro-bg: #4a1a15;
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-tema="claro"]) {
+    --bg: #10191c; --surface: #182428; --ink: #e6edee; --muted: #93a5a9; --line: #2a3a3f;
+    --medido: #4fd1c1; --medido-bg: #123a37; --estimado: #f4b45f; --estimado-bg: #3f2a0f;
+    --peligro: #ff8f83; --peligro-bg: #4a1a15;
+    color-scheme: dark;
+  }
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font: 16px/1.45 var(--fuente); font-variant-numeric: tabular-nums;
+  padding-bottom: calc(var(--tab-h) + env(safe-area-inset-bottom));
+  -webkit-tap-highlight-color: transparent;
+}
+main { max-width: 640px; margin: 0 auto; padding: calc(12px + env(safe-area-inset-top)) 16px 24px; }
+h1 { font-size: 22px; font-weight: 600; margin: 8px 0 14px; letter-spacing: -0.01em; }
+h2 { font-size: 15px; font-weight: 600; margin: 22px 0 8px; color: var(--muted); }
+h3 { font-size: 16px; font-weight: 600; margin: 12px 0 6px; }
+p { margin: 6px 0; }
+small, .muted { color: var(--muted); font-size: 13px; }
+a { color: var(--medido); }
+hr { border: 0; border-top: 1px solid var(--line); margin: 18px 0; }
+[hidden] { display: none !important; }
+:focus-visible { outline: 2px solid var(--medido); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+
+/* ----- formularios ----- */
+label { display: block; font-size: 13px; color: var(--muted); margin: 12px 0 4px; }
+input, select, textarea, button { font: inherit; color: inherit; }
+input[type="text"], input[type="number"], input[type="password"], input[type="date"], select, textarea {
+  width: 100%; min-height: 44px; padding: 8px 10px; border: 1px solid var(--line); border-radius: var(--radio);
+  background: var(--surface); font-size: 16px; /* evita zoom en iOS */
+}
+textarea { min-height: 64px; resize: vertical; }
+.fila { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.fila-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+.check { display: flex; align-items: center; gap: 10px; min-height: 44px; font-size: 15px; color: var(--ink); }
+.check input { width: 22px; height: 22px; margin: 0; }
+button { cursor: pointer; }
+.btn {
+  min-height: 44px; padding: 10px 16px; border-radius: var(--radio); border: 1px solid var(--line);
+  background: var(--surface); font-weight: 500; display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+}
+.btn-primario { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.btn-peligro { color: var(--peligro); border-color: var(--peligro); }
+.btn-bloque { width: 100%; margin-top: 14px; }
+.btn:disabled { opacity: .5; cursor: default; }
+.acciones { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+.acciones .btn { flex: 1; }
+
+/* ----- registro rápido ----- */
+.rapido { display: grid; grid-template-columns: 1fr 1fr auto; gap: 8px; align-items: end; margin-bottom: 4px; }
+.rapido label { margin: 0 0 4px; }
+.rapido input { font-size: 24px; font-weight: 600; min-height: 56px; text-align: center; }
+.rapido .btn { min-height: 56px; padding: 0 18px; }
+
+/* ----- cifras con procedencia ----- */
+.cifra { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; margin: 4px 0; }
+.cifra .num { font-size: 34px; font-weight: 650; letter-spacing: -0.02em; line-height: 1; }
+.cifra .unidad { font-size: 14px; color: var(--muted); }
+.pill { font-size: 12px; padding: 2px 8px; border-radius: 999px; font-weight: 500; white-space: nowrap; }
+.pill-medido { background: var(--medido-bg); color: var(--medido); }
+.pill-estimado { background: var(--estimado-bg); color: var(--estimado); }
+.pill-A { background: var(--medido-bg); color: var(--medido); }
+.pill-B { background: var(--estimado-bg); color: var(--estimado); }
+.pill-C { background: var(--peligro-bg); color: var(--peligro); }
+.porque {
+  min-height: 32px; padding: 4px 10px; border-radius: 999px; border: 1px dashed var(--line); background: transparent;
+  font-size: 12px; color: var(--muted);
+}
+.porque[aria-expanded="true"] { border-style: solid; color: var(--ink); }
+.explicacion { font-size: 14px; color: var(--muted); border-left: 2px solid var(--line); padding: 4px 10px; margin: 6px 0 10px; }
+
+/* ----- macros ----- */
+.macro { display: grid; grid-template-columns: 1fr auto; gap: 4px 10px; align-items: baseline; padding: 10px 0; border-top: 1px solid var(--line); }
+.macro:first-of-type { border-top: 0; }
+.macro .nombre { font-weight: 600; }
+.macro .rango { font-size: 18px; font-weight: 600; }
+.macro .resto { grid-column: 1 / -1; font-size: 13px; color: var(--muted); display: flex; justify-content: space-between; }
+.bar { position: relative; height: 8px; background: var(--line); border-radius: 4px; overflow: hidden; grid-column: 1 / -1; }
+.bar-rango { position: absolute; top: 0; bottom: 0; background: var(--medido-bg); }
+.bar-fill { position: absolute; top: 0; bottom: 0; left: 0; background: var(--medido); border-radius: 4px; }
+.bar[data-estado="alto"] .bar-fill { background: var(--estimado); }
+.bar[data-estado="bajo"] .bar-fill { opacity: .55; }
+
+/* ----- avisos ----- */
+.aviso { padding: 10px 12px; border-radius: var(--radio); font-size: 14px; margin: 10px 0; border: 1px solid var(--line); background: var(--surface); }
+.aviso-bloqueo { border-color: var(--peligro); background: var(--peligro-bg); color: var(--ink); }
+.aviso-atencion { border-color: var(--estimado); background: var(--estimado-bg); }
+.aviso-ok { border-color: var(--medido); background: var(--medido-bg); }
+.aviso strong { display: block; margin-bottom: 4px; }
+
+/* ----- gráficos ----- */
+.chart { width: 100%; height: auto; display: block; margin: 6px 0; }
+.chart .grid { stroke: var(--line); stroke-width: 1; }
+.chart .tick { fill: var(--muted); font-size: 10px; }
+.chart .l1 { stroke: var(--medido); stroke-width: 2; }
+.chart .l1-pt { fill: var(--medido); }
+.chart .l2 { stroke: var(--muted); stroke-width: 1; stroke-dasharray: 2 3; }
+.chart .l2-pt { fill: var(--muted); }
+.chart .l3 { stroke: var(--estimado); stroke-width: 2; }
+.chart .l3-pt { fill: var(--estimado); }
+.leyenda { display: flex; gap: 14px; font-size: 12px; color: var(--muted); }
+.leyenda i { display: inline-block; width: 14px; height: 2px; vertical-align: middle; margin-right: 4px; background: var(--medido); }
+.leyenda i.l2 { background: repeating-linear-gradient(90deg, var(--muted) 0 2px, transparent 2px 5px); }
+.leyenda i.l3 { background: var(--estimado); }
+
+/* ----- listas de datos ----- */
+.datos { display: grid; grid-template-columns: 1fr auto; gap: 6px 12px; font-size: 14px; }
+.datos dt { color: var(--muted); margin: 0; }
+.datos dd { margin: 0; text-align: right; font-weight: 500; }
+.tarjeta { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radio); padding: 12px; margin: 10px 0; }
+
+/* ----- recetas ----- */
+.receta h3 { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.receta .meta { font-size: 13px; color: var(--muted); }
+.receta table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 8px 0; }
+.receta td { padding: 4px 0; border-top: 1px solid var(--line); }
+.receta td:last-child { text-align: right; white-space: nowrap; }
+.receta td .orig { color: var(--muted); text-decoration: line-through; margin-right: 6px; font-size: 12px; }
+.receta ol { padding-left: 20px; margin: 8px 0; }
+.receta li { margin: 4px 0; }
+.totales { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; text-align: center; margin: 8px 0; }
+.totales div { background: var(--bg); border-radius: var(--radio); padding: 6px 2px; }
+.totales b { display: block; font-size: 18px; }
+.totales small { font-size: 11px; }
+.chips { display: flex; gap: 6px; flex-wrap: wrap; margin: 8px 0; }
+.chip { min-height: 44px; padding: 6px 12px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); font-size: 14px; }
+.chip[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+
+/* ----- suplementos ----- */
+.sup { padding: 12px 0; border-top: 1px solid var(--line); }
+.sup h3 { display: flex; gap: 8px; align-items: center; margin: 0 0 4px; }
+.sup dl { margin: 6px 0; font-size: 14px; }
+.sup dt { color: var(--muted); font-size: 12px; margin-top: 6px; }
+.sup dd { margin: 0; }
+details summary { cursor: pointer; padding: 10px 0; font-weight: 600; min-height: 44px; display: flex; align-items: center; }
+
+/* ----- barra de pestañas ----- */
+#tabs {
+  position: fixed; left: 0; right: 0; bottom: 0; height: calc(var(--tab-h) + env(safe-area-inset-bottom));
+  padding-bottom: env(safe-area-inset-bottom); background: var(--surface); border-top: 1px solid var(--line);
+  display: flex; justify-content: space-around; z-index: 10;
+}
+#tabs button {
+  flex: 1; min-width: 44px; background: none; border: 0; color: var(--muted); display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 2px; font-size: 11px; padding: 6px 0;
+}
+#tabs button[aria-current="page"] { color: var(--ink); font-weight: 600; }
+#tabs svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+
+#toast {
+  position: fixed; left: 50%; bottom: calc(var(--tab-h) + env(safe-area-inset-bottom) + 12px); transform: translateX(-50%);
+  background: var(--ink); color: var(--bg); padding: 10px 16px; border-radius: 999px; font-size: 14px; z-index: 20; max-width: 90vw;
+}
+
+@media (min-width: 720px) {
+  main { padding-top: 24px; }
+  h1 { font-size: 26px; }
+}

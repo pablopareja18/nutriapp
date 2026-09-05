@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
+  <title>nutriapp</title>
+  <meta name="description" content="Calorías, macros y gasto energético medidos con tus datos. Recetas y suplementos con evidencia.">
+  <meta name="theme-color" content="#f6f7f5" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#10191c" media="(prefers-color-scheme: dark)">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="nutriapp">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" href="./icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="./icons/icon-192.png">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <main id="vistas">
+    <section id="vista-hoy" class="vista" data-vista="hoy"></section>
+    <section id="vista-perfil" class="vista" data-vista="perfil" hidden></section>
+    <section id="vista-recetas" class="vista" data-vista="recetas" hidden></section>
+    <section id="vista-suplementos" class="vista" data-vista="suplementos" hidden></section>
+    <section id="vista-ajustes" class="vista" data-vista="ajustes" hidden></section>
+  </main>
+
+  <nav id="tabs" aria-label="Secciones">
+    <button data-tab="hoy" aria-current="page"><svg viewBox="0 0 24 24"><path d="M4 5h16v14H4zM4 9h16M8 3v4M16 3v4"/></svg><span>Hoy</span></button>
+    <button data-tab="perfil"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg><span>Perfil</span></button>
+    <button data-tab="recetas"><svg viewBox="0 0 24 24"><path d="M6 3v18M6 3c-2 0-3 2-3 5s1 4 3 4M6 12c2 0 3-1 3-4S8 3 6 3M15 3v18M15 3c-1 0-3 3-3 7 0 2 1 3 3 3M15 3c1 0 3 3 3 7 0 2-1 3-3 3"/></svg><span>Recetas</span></button>
+    <button data-tab="suplementos"><svg viewBox="0 0 24 24"><rect x="3" y="9" width="18" height="6" rx="3" transform="rotate(-45 12 12)"/><path d="M8 16l8-8"/></svg><span>Suplementos</span></button>
+    <button data-tab="ajustes"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/></svg><span>Ajustes</span></button>
+  </nav>
+
+  <div id="toast" role="status" aria-live="polite" hidden></div>
+
+  <script type="module" src="./js/app.js"></script>
+</body>
+</html>
